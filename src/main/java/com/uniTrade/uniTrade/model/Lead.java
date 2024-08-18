@@ -9,10 +9,11 @@ import java.util.List;
 @Document(collection = "Leads")
 public class Lead {
     @Id
-    private String _id;
+    private String id;
     private int lId;
     private int userMatriculation; // Matriculation number of the user who created the lead
     private String content; // Content of the lead
+    private String leadTitle; // Content of the lead
     private List<String> imageUrls; // URLs for images associated with the lead
     private LocalDateTime createdAt; // Timestamp for when the lead was created
     private LocalDateTime lastUpdatedAt; // Timestamp for when the lead was last updated
@@ -24,6 +25,14 @@ public class Lead {
     }
 
     // Getters and Setters
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public int getlId() {
         return lId;
@@ -43,6 +52,14 @@ public class Lead {
 
     public String getContent() {
         return content;
+    }
+
+    public String getLeadTitle() {
+        return leadTitle;
+    }
+
+    public void setLeadTitle(String leadTitle) {
+        this.leadTitle = leadTitle;
     }
 
     public void setContent(String content) {
@@ -92,9 +109,10 @@ public class Lead {
     @Override
     public String toString() {
         return "Lead{" +
-                "LId='" + lId + '\'' +
+                "id='" + id + '\'' +
                 ", userMatriculation=" + userMatriculation +
                 ", content='" + content + '\'' +
+                ", leadTitle='" + leadTitle + '\'' +
                 ", imageUrls=" + imageUrls +
                 ", createdAt=" + createdAt +
                 ", lastUpdatedAt=" + lastUpdatedAt +

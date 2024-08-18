@@ -16,4 +16,6 @@ public interface LeadRepository extends MongoRepository<Lead, String> {
     void deleteBylId(int lId);
 
     boolean existsBylId(int id);
+
+    Optional<Lead> findById(String id);
 }

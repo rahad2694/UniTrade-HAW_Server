@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/leads")
+@CrossOrigin(origins = "http://localhost:5173")
 public class LeadController {
 
     @Autowired
@@ -43,9 +44,9 @@ public class LeadController {
         }
     }
 
-    @GetMapping("/lead-by-id/{lId}")
-    public ResponseEntity<Lead> getLeadByLeadId(@PathVariable int lId) {
-        Optional<Lead> leadOptional = leadRepository.findBylId(lId);
+    @GetMapping("/lead-by-id/{id}")
+    public ResponseEntity<Lead> getLeadByLeadId(@PathVariable String id) {
+        Optional<Lead> leadOptional = leadRepository.findById(id);
 
         return leadOptional.map(lead -> new ResponseEntity<>(lead, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -65,16 +66,17 @@ public class LeadController {
         return new ResponseEntity<>(newLead, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{lId}")
-    public ResponseEntity<Lead> updateLead(@PathVariable int lId, @RequestBody Lead lead) {
-        Optional<Lead> leadOptional = leadRepository.findBylId(lId);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Lead> updateLead(@PathVariable String id, @RequestBody Lead lead) {
+        Optional<Lead> leadOptional = leadRepository.findById(id);
 
         if (leadOptional.isPresent()) {
             Lead leadToUpdate = leadOptional.get();
-            leadToUpdate.setContent(lead.getContent());
+//            leadToUpdate.setContent(lead.getContent());
             //leadToUpdate.setUserMatriculation(lead.getUserMatriculation());
             leadToUpdate.setCreatedAt(lead.getCreatedAt());
             leadToUpdate.setContent(lead.getContent());
+            leadToUpdate.setLeadTitle(lead.getLeadTitle());
             leadToUpdate.setImageUrls(lead.getImageUrls());
             leadToUpdate.setComments(lead.getComments());
             leadToUpdate.setLikes(lead.getLikes());
