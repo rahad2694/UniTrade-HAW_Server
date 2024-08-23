@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     @Autowired
@@ -27,6 +28,14 @@ public class UserController {
     @GetMapping("/user/{matriculation}")
     public ResponseEntity<User> getUserByMatriculation(@PathVariable int matriculation) {
         Optional<User> userOptional = userRepository.findByMatriculation(matriculation);
+
+        return userOptional.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
 
         return userOptional.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -60,7 +69,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
     @DeleteMapping("/delete/{matriculation}")
     public ResponseEntity<Void> deleteUserByMatriculation(@PathVariable int matriculation) {

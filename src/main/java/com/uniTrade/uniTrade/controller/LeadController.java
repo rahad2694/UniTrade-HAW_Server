@@ -72,8 +72,8 @@ public class LeadController {
 
         if (leadOptional.isPresent()) {
             Lead leadToUpdate = leadOptional.get();
-//            leadToUpdate.setContent(lead.getContent());
-            //leadToUpdate.setUserMatriculation(lead.getUserMatriculation());
+            // leadToUpdate.setContent(lead.getContent());
+            // leadToUpdate.setUserMatriculation(lead.getUserMatriculation());
             leadToUpdate.setCreatedAt(lead.getCreatedAt());
             leadToUpdate.setContent(lead.getContent());
             leadToUpdate.setLeadTitle(lead.getLeadTitle());
@@ -91,21 +91,23 @@ public class LeadController {
         }
     }
 
-    @DeleteMapping("/delete/{matriculation}/{lId}")
-    public ResponseEntity<Void> deleteLead(@PathVariable int matriculation, @PathVariable int lId) {
-        Optional<Lead> leadOptional = leadRepository.findBylId(lId);
+    @DeleteMapping("/delete/{matriculation}/{id}")
+    public ResponseEntity<Void> deleteLead(@PathVariable int matriculation, @PathVariable String id) {
+        Optional<Lead> leadOptional = leadRepository.findById(id);
 
         if (leadOptional.isPresent()) {
             Lead lead = leadOptional.get();
             if (lead.getUserMatriculation() == matriculation) {
-                leadRepository.deleteBylId(lead.getlId());
+                leadRepository.deleteById(lead.getId());
 
-/*              System.out.println("Lead deleted: " + lead.getlId());
-                System.out.println("Mat: " + matriculation);
-                System.out.println("Lead Id: " + lId);
+                System.out.println("Lead deleted: " + lead.getId());
+                System.out.println("Link Mat: " + lead.getUserMatriculation());
+                System.out.println("Lead Mat: " + matriculation);
+                System.out.println("Lead Id: " + id);
                 System.out.println(lead.toString());
-                */
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
