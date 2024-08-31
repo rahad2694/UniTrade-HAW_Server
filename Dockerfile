@@ -22,7 +22,7 @@ RUN ./mvnw clean package -DskipTests
 RUN ls -al /app/target
 
 # Copy the built JAR file to the final image
-#COPY app/target/uniTrade-0.0.1-SNAPSHOT.jar /app/uniTrade-0.0.1-SNAPSHOT.jar
+COPY uniTrade-0.0.1-SNAPSHOT.jar /app/uniTrade-0.0.1-SNAPSHOT.jar
 
 # Command to run the application
 ENTRYPOINT ["java", "-jar", "/app/uniTrade-0.0.1-SNAPSHOT.jar"]
