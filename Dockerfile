@@ -1,25 +1,28 @@
-# First stage: build the application
-FROM maven:3.8.6-openjdk-21 AS build
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:21-jdk-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy Maven wrapper and configuration files
+# Copy Maven wrapper and other necessary files
 COPY .mvn/ .mvn/
 COPY mvnw .
 COPY pom.xml .
 
-# Copy the source code and build the JAR file
+# Copy the source code and build it
 COPY src /app/src
+
+# Make the Maven wrapper executable
 RUN chmod +x mvnw
+
+# Build the application
 RUN ./mvnw clean package -DskipTests
 
-# Second stage: create the final image
-FROM openjdk:21-jdk-slim
+# List files in target directory for debugging
+RUN ls -al /app/target
 
-WORKDIR /app
-
-# Copy the built JAR file from the build stage
+# Copy the built JAR file to the final image
 COPY --from=build /app/target/uniTrade-0.0.1-SNAPSHOT.jar /app/uniTrade-0.0.1-SNAPSHOT.jar
 
 # Command to run the application
-CMD ["java", "-jar", "/app/uniTrade-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/app/uniTrade-0.0.1-SNAPSHOT.jar"]
