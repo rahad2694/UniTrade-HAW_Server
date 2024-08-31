@@ -4,8 +4,12 @@ FROM openjdk:21-jdk-slim AS build
 # Set the working directory in the container for the build
 WORKDIR /app
 
-# Copy the Maven project files to the container
+# Copy the Maven wrapper and project files to the container
+COPY .mvn/ .mvn/
+COPY mvnw .
 COPY pom.xml .
+
+# Copy the source code
 COPY src ./src
 
 # Build the project to create the jar file
