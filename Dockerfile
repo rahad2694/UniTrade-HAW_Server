@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM circleci/openjdk
+FROM openjdk:21-jdk-slim
 
 # Set the working directory
 WORKDIR /app
