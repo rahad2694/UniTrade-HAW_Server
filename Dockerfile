@@ -1,6 +1,6 @@
 # Use an official OpenJDK runtime as a parent image
 #FROM openjdk:21-jdk-slim
-FROM openjdk
+FROM openjdk:23-ea-21-jdk-windowsservercore-ltsc2022
 
 # First stage: build the application
 #FROM maven:3.8.6-openjdk-21 AS build
