@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LeadRepository extends MongoRepository<Lead, String> {
+
     List<Lead> findByUserMatriculation(int userMatriculation);
 
     Optional<Lead> findBylId(int lId);
