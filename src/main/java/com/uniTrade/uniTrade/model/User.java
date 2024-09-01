@@ -27,7 +27,7 @@ public class User {
     public User() {
         this.createdAt = LocalDateTime.now();
         this.role = new ArrayList<>();
-        this.role.add("user");
+        this.role.add("ROLE_USER");
     }
 
     public User(String _id, int matriculation, String firstName, String lastName, LocalDate dob, String email, String password, List<String> role, LocalDateTime createdAt) {
@@ -41,7 +41,7 @@ public class User {
         this.role = role;
         /*this.role = (role != null && !role.isEmpty()) ? role : new ArrayList<>();
         if (this.role.isEmpty()) {
-            this.role.add("user");
+            this.role.add("ROLE_USER");
         }*/
         this.createdAt = createdAt;
         //this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
