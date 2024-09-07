@@ -15,11 +15,9 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
-        //http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.formLogin(withDefaults());
-        //http.httpBasic(withDefaults());
+        http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll())
+                .csrf().disable();
+
         return http.build();
     }
-
 }
