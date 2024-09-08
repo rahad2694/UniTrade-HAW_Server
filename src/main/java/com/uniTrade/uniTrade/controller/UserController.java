@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{email}")
-    public ResponseEntity<User> getUserByMatriculation(@PathVariable String email) {
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         return userOptional.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
@@ -61,7 +60,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{userEmail}")
-    public ResponseEntity<Void> deleteUserByMatriculation(@PathVariable String userEmail) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String userEmail) {
         Optional<User> userOptional = userRepository.findByEmail(userEmail);
 
         if (userOptional.isPresent()) {
@@ -71,9 +70,9 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @GetMapping("/isAdmin")
-    public boolean isAdmin(@RequestBody User user) {
-        Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
+    @GetMapping("/isAdmin/{email}")
+    public boolean isAdmin(@PathVariable String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
         System.out.println(userOptional);
         if (userOptional.isPresent()) {
             User existingUser = userOptional.get();

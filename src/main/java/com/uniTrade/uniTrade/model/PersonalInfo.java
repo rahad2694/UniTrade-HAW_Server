@@ -3,14 +3,14 @@ package com.uniTrade.uniTrade.model;
 
 public class PersonalInfo {
     private String street;
-    private String houseNumber;
-    private String postalCode;
+    private int houseNumber;
+    private int postalCode;
     private String city;
     private String country;
 
     public PersonalInfo() {}
 
-    public PersonalInfo(String street, String houseNumber, String postalCode, String city, String country) {
+    public PersonalInfo(String street, int houseNumber, int postalCode, String city, String country) {
         this.street = street;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
@@ -26,19 +26,19 @@ public class PersonalInfo {
         this.street = street;
     }
 
-    public String getHouseNumber() {
+    public int getHouseNumber() {
         return houseNumber;
     }
 
-    public void setHouseNumber(String houseNumber) {
+    public void setHouseNumber(int houseNumber) {
         this.houseNumber = houseNumber;
     }
 
-    public String getPostalCode() {
+    public int getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(int postalCode) {
         this.postalCode = postalCode;
     }
 

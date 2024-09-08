@@ -9,8 +9,6 @@ import java.util.Optional;
 public interface LeadRepository extends MongoRepository<Lead, String> {
 
     List<Lead> findByUserEmail(String userEmail);
-    Optional<Lead> findBylId(int lId);
     List<Lead> findAllByOrderByCreatedAtDesc();
-
     Optional<Lead> findById(String id);
 }
