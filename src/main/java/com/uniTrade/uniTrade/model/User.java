@@ -23,7 +23,7 @@ public class User {
     private List<String> role;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdatedAt;
-    private PersonalInfo address;
+    private Address address;
 
     public User() {
         this.createdAt = LocalDateTime.now();
@@ -31,7 +31,7 @@ public class User {
         this.role.add("ROLE_USER");
     }
 
-    public User(String _id, int matriculation, String firstName, String lastName, LocalDate dob, String email, String password, List<String> role, LocalDateTime createdAt, PersonalInfo Address) {
+    public User(String _id, int matriculation, String firstName, String lastName, LocalDate dob, String email, String password, List<String> role, LocalDateTime createdAt, Address Address) {
         this._id = _id;
         this.matriculation = matriculation;
         this.firstName = firstName;
@@ -120,11 +120,11 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public PersonalInfo getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(PersonalInfo address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

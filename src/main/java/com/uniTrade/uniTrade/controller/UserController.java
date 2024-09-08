@@ -24,7 +24,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/user/{email}")
+    @GetMapping("/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
@@ -48,6 +48,12 @@ public class UserController {
             userToUpdate.setFirstName(user.getFirstName());
             userToUpdate.setLastName(user.getLastName());
             userToUpdate.setDob(user.getDob());
+            userToUpdate.setEmail(user.getEmail());
+            userToUpdate.setPassword(user.getPassword());
+            userToUpdate.setRole(user.getRole());
+            userToUpdate.setMatriculation(user.getMatriculation());
+            userToUpdate.setLastUpdatedAt(LocalDateTime.now());
+            userToUpdate.setAddress(user.getAddress());
 
             if (userToUpdate.getLastUpdatedAt() == null || userToUpdate.getLastUpdatedAt().isBefore(LocalDateTime.now())) {
                 userToUpdate.setLastUpdatedAt(LocalDateTime.now());
