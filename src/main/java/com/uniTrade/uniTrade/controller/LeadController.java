@@ -30,11 +30,11 @@ public class LeadController {
         return new ResponseEntity<>(leads, HttpStatus.OK);
     }
 
-    @GetMapping("/lead-by-user/{matriculation}")
-    public ResponseEntity<List<Lead>> getLeadsByUser(@PathVariable int matriculation) {
-        List<Lead> leads = leadRepository.findByUserMatriculation(matriculation);
+    @GetMapping("/lead-by-userEmail/{userEmail}")
+    public ResponseEntity<List<Lead>> getLeadsByUserEmail(@PathVariable String userEmail) {
+        List<Lead> leads = leadRepository.findByUserEmail(userEmail);
 
-        System.out.println("Matriculation: " + matriculation);
+        System.out.println("User: " + userEmail);
         System.out.println("Leads found: " + leads.size());
 
         if (leads.isEmpty()) {
@@ -43,6 +43,7 @@ public class LeadController {
             return new ResponseEntity<>(leads, HttpStatus.OK);
         }
     }
+
 
     @GetMapping("/lead-by-id/{id}")
     public ResponseEntity<Lead> getLeadByLeadId(@PathVariable String id) {
@@ -54,7 +55,7 @@ public class LeadController {
 
     @PostMapping("/create-lead")
     public ResponseEntity<Lead> createLead(@RequestBody Lead lead) {
-        Optional<User> userOptional = userRepository.findByMatriculation(lead.getUserMatriculation());
+        Optional<User> userOptional = userRepository.findByEmail(lead.getUserEmail());
 
         // Ensure the lead has a valid user matriculation number
         if (userOptional.isEmpty()) {
@@ -72,8 +73,6 @@ public class LeadController {
 
         if (leadOptional.isPresent()) {
             Lead leadToUpdate = leadOptional.get();
-            // leadToUpdate.setContent(lead.getContent());
-            // leadToUpdate.setUserMatriculation(lead.getUserMatriculation());
             leadToUpdate.setCreatedAt(lead.getCreatedAt());
             leadToUpdate.setContent(lead.getContent());
             leadToUpdate.setLeadTitle(lead.getLeadTitle());
@@ -91,19 +90,14 @@ public class LeadController {
         }
     }
 
-    @DeleteMapping("/delete/{matriculation}/{id}")
-    public ResponseEntity<Void> deleteLead(@PathVariable int matriculation, @PathVariable String id) {
+    @DeleteMapping("/delete/{userEmail}/{id}")
+    public ResponseEntity<Void> deleteLead(@PathVariable String userEmail, @PathVariable String id) {
         Optional<Lead> leadOptional = leadRepository.findById(id);
 
         if (leadOptional.isPresent()) {
             Lead lead = leadOptional.get();
-            if (lead.getUserMatriculation() == matriculation) {
+            if (lead.getUserEmail().equals(userEmail)) {
                 leadRepository.deleteById(lead.getId());
-
-                System.out.println("Lead deleted: " + lead.getId());
-                System.out.println("Link Mat: " + lead.getUserMatriculation());
-                System.out.println("Lead Mat: " + matriculation);
-                System.out.println("Lead Id: " + id);
                 System.out.println(lead.toString());
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {

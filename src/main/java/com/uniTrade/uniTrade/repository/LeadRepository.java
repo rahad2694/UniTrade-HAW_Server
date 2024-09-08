@@ -8,15 +8,7 @@ import java.util.Optional;
 
 public interface LeadRepository extends MongoRepository<Lead, String> {
 
-    List<Lead> findByUserMatriculation(int userMatriculation);
-
-    Optional<Lead> findBylId(int lId);
-
+    List<Lead> findByUserEmail(String userEmail);
     List<Lead> findAllByOrderByCreatedAtDesc();
-
-    void deleteBylId(int lId);
-
-    boolean existsBylId(int id);
-
     Optional<Lead> findById(String id);
 }
