@@ -23,6 +23,7 @@ public class User {
     private List<String> role;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdatedAt;
+    private PersonalInfo Address;
 
     public User() {
         this.createdAt = LocalDateTime.now();
@@ -30,7 +31,7 @@ public class User {
         this.role.add("ROLE_USER");
     }
 
-    public User(String _id, int matriculation, String firstName, String lastName, LocalDate dob, String email, String password, List<String> role, LocalDateTime createdAt) {
+    public User(String _id, int matriculation, String firstName, String lastName, LocalDate dob, String email, String password, List<String> role, LocalDateTime createdAt, PersonalInfo Address) {
         this._id = _id;
         this.matriculation = matriculation;
         this.firstName = firstName;
@@ -44,7 +45,7 @@ public class User {
             this.role.add("ROLE_USER");
         }*/
         this.createdAt = createdAt;
-        //this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
+        this.Address = Address;
     }
 
     public LocalDateTime getLastUpdatedAt() {
@@ -119,6 +120,14 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public PersonalInfo getAddress() {
+        return Address;
+    }
+
+    public void setAddress(PersonalInfo address) {
+        this.Address = address;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -132,6 +141,7 @@ public class User {
                 ", role=" + role +
                 ", createdAt=" + createdAt +
                 ", lastUpdatedAt=" + lastUpdatedAt +
+                ", address=" + Address +
                 '}';
     }
 }

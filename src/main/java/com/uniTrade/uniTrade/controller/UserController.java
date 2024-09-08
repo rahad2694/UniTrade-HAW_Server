@@ -25,16 +25,8 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/user/{matriculation}")
-    public ResponseEntity<User> getUserByMatriculation(@PathVariable int matriculation) {
-        Optional<User> userOptional = userRepository.findByMatriculation(matriculation);
-
-        return userOptional.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+    @GetMapping("/user/{email}")
+    public ResponseEntity<User> getUserByMatriculation(@PathVariable String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         return userOptional.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
@@ -47,9 +39,9 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{matriculation}")
-    public ResponseEntity<User> updateUserByMatriculation(@PathVariable int matriculation, @RequestBody User user) {
-        Optional<User> userOptional = this.userRepository.findByMatriculation(matriculation);
+    @PutMapping("/update/{email}")
+    public ResponseEntity<User> updateUserByMatriculation(@PathVariable String email, @RequestBody User user) {
+        Optional<User> userOptional = this.userRepository.findByEmail(email);
 
         if (userOptional.isPresent()) {
             User userToUpdate = userOptional.get();
@@ -57,10 +49,8 @@ public class UserController {
             userToUpdate.setFirstName(user.getFirstName());
             userToUpdate.setLastName(user.getLastName());
             userToUpdate.setDob(user.getDob());
-            userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setPassword(user.getPassword());
 
-            if (userToUpdate.getLastUpdatedAt() == null) {
+            if (userToUpdate.getLastUpdatedAt() == null || userToUpdate.getLastUpdatedAt().isBefore(LocalDateTime.now())) {
                 userToUpdate.setLastUpdatedAt(LocalDateTime.now());
             }
 
@@ -70,9 +60,9 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{matriculation}")
-    public ResponseEntity<Void> deleteUserByMatriculation(@PathVariable int matriculation) {
-        Optional<User> userOptional = userRepository.findByMatriculation(matriculation);
+    @DeleteMapping("/delete/{userEmail}")
+    public ResponseEntity<Void> deleteUserByMatriculation(@PathVariable String userEmail) {
+        Optional<User> userOptional = userRepository.findByEmail(userEmail);
 
         if (userOptional.isPresent()) {
             userRepository.delete(userOptional.get());
@@ -81,5 +71,14 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @GetMapping("/isAdmin")
+    public boolean isAdmin(@RequestBody User user) {
+        Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
+        System.out.println(userOptional);
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+            return existingUser.getRole().contains("ROLE_ADMIN");
+        }
+        return false;
+    }
 }

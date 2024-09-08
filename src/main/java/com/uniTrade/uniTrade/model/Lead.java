@@ -10,8 +10,7 @@ import java.util.List;
 public class Lead {
     @Id
     private String id;
-    private int lId;
-    private int userMatriculation; // Matriculation number of the user who created the lead
+    private String userEmail;
     private String content; // Content of the lead
     private String leadTitle; // Content of the lead
     private List<String> imageUrls; // URLs for images associated with the lead
@@ -26,28 +25,20 @@ public class Lead {
 
     // Getters and Setters
 
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public int getlId() {
-        return lId;
-    }
-
-    public void setlId(int lId) {
-        this.lId = lId;
-    }
-
-    public int getUserMatriculation() {
-        return userMatriculation;
-    }
-
-    public void setUserMatriculation(int userMatriculation) {
-        this.userMatriculation = userMatriculation;
     }
 
     public String getContent() {
@@ -110,7 +101,7 @@ public class Lead {
     public String toString() {
         return "Lead{" +
                 "id='" + id + '\'' +
-                ", userMatriculation=" + userMatriculation +
+                ", userEmail='" + userEmail + '\'' +
                 ", content='" + content + '\'' +
                 ", leadTitle='" + leadTitle + '\'' +
                 ", imageUrls=" + imageUrls +
