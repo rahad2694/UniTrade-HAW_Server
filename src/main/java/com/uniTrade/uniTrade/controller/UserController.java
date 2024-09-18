@@ -38,6 +38,16 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody String email) {
+        if(userRepository.findByEmail(email).isPresent()) {
+            return new ResponseEntity<>(userRepository.findByEmail(email).get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     @PutMapping("/update/{email}")
     public ResponseEntity<User> updateUserByMatriculation(@PathVariable String email, @RequestBody User user) {
         Optional<User> userOptional = this.userRepository.findByEmail(email);
