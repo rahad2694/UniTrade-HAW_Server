@@ -24,6 +24,7 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdatedAt;
     private Address address;
+    private String userProfilePic;
 
     public User() {
         this.createdAt = LocalDateTime.now();
@@ -70,6 +71,14 @@ public class User {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getUserProfilePic() {
+        return userProfilePic;
+    }
+
+    public void setUserProfilePic(String userProfilePic) {
+        this.userProfilePic = userProfilePic;
     }
 
     public String getLastName() {

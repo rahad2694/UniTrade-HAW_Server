@@ -57,7 +57,7 @@ public class LeadController {
     public ResponseEntity<Lead> createLead(@RequestBody Lead lead) {
         Optional<User> userOptional = userRepository.findByEmail(lead.getUserEmail());
 
-        // Ensure the lead has a valid user matriculation number
+        // Ensure the lead has a valid user
         if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
