@@ -2,6 +2,7 @@ package com.uniTrade.uniTrade.controller;
 
 import com.uniTrade.uniTrade.model.User;
 import com.uniTrade.uniTrade.repository.UserRepository;
+import com.uniTrade.uniTrade.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,10 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/allUsers")
     public ResponseEntity<List<User>> getAllUser() {
@@ -34,9 +38,18 @@ public class UserController {
 
     @PostMapping("/addUser")
     public ResponseEntity<User> addUser(@RequestBody User user) {
-        User newUser = this.userRepository.save(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        Optional<User> existingUserOptional = userRepository.findByEmail(user.getEmail());
+
+        if (existingUserOptional.isPresent()) {
+            // If the user exists, return a 409 Conflict status
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } else {
+            // If the user does not exist, create the new user
+            User newUser = userService.upsertUser(user);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody String email) {
@@ -48,28 +61,13 @@ public class UserController {
     }
 
 
-    @PutMapping("/update/{email}")
-    public ResponseEntity<User> updateUserByMatriculation(@PathVariable String email, @RequestBody User user) {
-        Optional<User> userOptional = this.userRepository.findByEmail(email);
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        // Call the upsert method in UserService
+        User updatedUser = userService.upsertUser(user);
 
-        if (userOptional.isPresent()) {
-            User userToUpdate = userOptional.get();
-
-            userToUpdate.setFirstName(user.getFirstName());
-            userToUpdate.setLastName(user.getLastName());
-            userToUpdate.setDob(user.getDob());
-            userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setPassword(user.getPassword());
-            userToUpdate.setRole(user.getRole());
-            userToUpdate.setMatriculation(user.getMatriculation());
-            userToUpdate.setLastUpdatedAt(LocalDateTime.now());
-            userToUpdate.setAddress(user.getAddress());
-
-            if (userToUpdate.getLastUpdatedAt() == null || userToUpdate.getLastUpdatedAt().isBefore(LocalDateTime.now())) {
-                userToUpdate.setLastUpdatedAt(LocalDateTime.now());
-            }
-
-            return new ResponseEntity<>(this.userRepository.save(userToUpdate), HttpStatus.OK);
+        if (updatedUser != null) {
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

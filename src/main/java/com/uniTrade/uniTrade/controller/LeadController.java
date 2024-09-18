@@ -4,6 +4,7 @@ import com.uniTrade.uniTrade.model.Lead;
 import com.uniTrade.uniTrade.model.User;
 import com.uniTrade.uniTrade.repository.LeadRepository;
 import com.uniTrade.uniTrade.repository.UserRepository;
+import com.uniTrade.uniTrade.service.LeadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,9 @@ public class LeadController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LeadService leadService;
 
     @GetMapping("/leads")
     public ResponseEntity<List<Lead>> getAllLeads() {
@@ -69,24 +73,21 @@ public class LeadController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Lead> updateLead(@PathVariable String id, @RequestBody Lead lead) {
+        // Check if the lead exists in the repository
         Optional<Lead> leadOptional = leadRepository.findById(id);
 
         if (leadOptional.isPresent()) {
             Lead leadToUpdate = leadOptional.get();
-            leadToUpdate.setCreatedAt(lead.getCreatedAt());
-            leadToUpdate.setContent(lead.getContent());
-            leadToUpdate.setLeadTitle(lead.getLeadTitle());
-            leadToUpdate.setImageUrls(lead.getImageUrls());
-            leadToUpdate.setComments(lead.getComments());
-            leadToUpdate.setLikes(lead.getLikes());
 
-            if (leadToUpdate.getLastUpdatedAt() == null) {
-                leadToUpdate.setLastUpdatedAt(LocalDateTime.now());
+            // Verify if the userEmail matches with the one in the database
+            if (!leadToUpdate.getUserEmail().equals(lead.getUserEmail())) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);  // Return unauthorized if emails don't match
             }
-
-            return new ResponseEntity<>(leadRepository.save(leadToUpdate), HttpStatus.OK);
+            // Use the upsert method from LeadService to update the lead
+            Lead updatedLead = leadService.upsertLead(id, lead);
+            return new ResponseEntity<>(updatedLead, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // If the lead doesn't exist, return not found
         }
     }
 
