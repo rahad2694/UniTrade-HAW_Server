@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,6 +89,16 @@ public class LeadController {
             return new ResponseEntity<>(updatedLead, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // If the lead doesn't exist, return not found
+        }
+    }
+    @PutMapping("/{leadId}/like")
+    public ResponseEntity<Lead> addLike(@PathVariable String leadId, @RequestParam String userEmail) {
+        Lead updatedLead = leadService.addLikeToLead(leadId, userEmail);
+
+        if (updatedLead != null) {
+            return ResponseEntity.ok(updatedLead);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

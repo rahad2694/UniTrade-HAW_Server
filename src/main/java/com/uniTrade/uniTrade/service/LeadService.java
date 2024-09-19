@@ -38,4 +38,14 @@ public class LeadService {
         // Return the updated lead
         return mongoTemplate.findOne(query, Lead.class);
     }
+
+    public Lead addLikeToLead(String leadId, String userEmail) {
+        Query query = new Query(Criteria.where("id").is(leadId));
+        Update update = new Update().addToSet("likes", userEmail);
+        update.set("lastUpdatedAt", LocalDateTime.now());
+
+        // Update the lead and return the result
+        return mongoTemplate.findAndModify(query, update, Lead.class);
+    }
+
 }
